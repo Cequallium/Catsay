@@ -12,7 +12,7 @@
 ### Running:
 
 ```bash
-$ catsay meow~ 8
+$ catsay "meow~" 8
 
      /| ､      
     (°､ ｡ 7     meow~
