@@ -12,12 +12,12 @@
 ### Running:
 
 ```bash
-    $ catsay meow~ 8
+$ catsay meow~ 8
 
-       /| ､      
-      (°､ ｡ 7     meow~
-       |､  ~ヽ   
-       じしf_,)〳
+     /| ､      
+    (°､ ｡ 7     meow~
+     |､  ~ヽ   
+     じしf_,)〳
 
 ```
 ### Help:
