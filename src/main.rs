@@ -1,65 +1,72 @@
-use std::env::args;
-use colored::Colorize;
-use colored::ColoredString;
+use colored::{ColoredString, Colorize};
+use std::{env, process::exit};
 
 fn main() {
+    // get all args
+    let args: Vec<String> = env::args().collect();
+    let color: Result<i32, _> = args[1].parse::<i32>();
+    let unwrapped_color = if color.is_err() { 
+        show_errorhelp("Invalid color");
+        exit(0)
+    }else{
+        color.unwrap()
+    };
 
-    let args: Vec<String> = args().collect();
-    
-    // spaghetti error handling / routing
-    if args[1] == "--help" {
-
-        // spacing
-        println!("");
-
-        println!("  {}","Usage: catsay <Phrase> <Color>".white());
-        print!("  {}","Colors:".black());
-        println!("  {}{}{}{}{}{}{}{}",
-                " 1 ".on_black(),
-                " 2 ".on_red(),
-                " 3 ".on_green(),
-                " 4 ".on_yellow(),
-                " 5 ".on_blue(),
-                " 6 ".on_magenta(),
-                " 7 ".on_cyan(),
-                " 8 ".on_white());
+    if &unwrapped_color > &8{
+        show_errorhelp("<Color> cannot be above 8");
     }
-    else if args.len() == 3 {
-
-        let arg2: &i8 = &args[2].parse::<i8>().unwrap();
-
-        if arg2 <= &8{
-            catsay(&args[1], arg2);
-        }
-        else {
-            catsay("<Color> has to be =<8", &2)
-        }
-    }
-    else {
-        catsay("both <Phrase> & <Color> are required",&1);
+    else{
+        catsay(&args[2], unwrapped_color);
     }
 }
 
-fn catsay(say: &str,color: &i8) {
+fn show_errorhelp(error: &str) {
+    show_error(error);
+    show_help();
+}
 
+fn show_error(error: &str) {
+    print!("\n");
+    println!("{}", error.red());
+}
+
+fn show_help() {
+    // spacing
+    print!("\n");
+
+    println!("  {}", "Usage: catsay <Phrase> <Color>");
+    print!("  {}", "Colors:".black());
+    println!(
+        "  {}{}{}{}{}{}{}{}",
+        " 1 ".white().on_black(),
+        " 2 ".black().on_red(),
+        " 3 ".black().on_green(),
+        " 4 ".black().on_yellow(),
+        " 5 ".black().on_blue(),
+        " 6 ".black().on_magenta(),
+        " 7 ".black().on_cyan(),
+        " 8 ".black().on_white()
+    );
+    exit(0);
+}
+
+fn catsay(say: &str, color: i32) {
     let line1: &str = "   /| ､      ";
     let line2: &str = "  (°､ ｡ 7    ";
     let line3: &str = "   |､  ~ヽ   ";
     let line4: &str = "   じしf_,)〳 ";
-    let cat: [&str; 4] = [line1,line2,line3,line4];
+    let cat: [&str; 4] = [line1, line2, line3, line4];
 
-    println!(""); // blank space
-    for i in 0..=3{
-        if i == 1{
-            println!("{} {}",colorize(cat[i],color), colorize(say, color));
-        }else{
-            println!("{}",colorize(cat[i],color));
+    for i in 0..=3 {
+        if i == 1 {
+            println!("{} {}", colorize(cat[i], &color), colorize(say, &color));
+        } else {
+            println!("{}", colorize(cat[i], &color));
         }
-    } 
-
+    }
 }
 
-fn colorize(i: &str,color: &i8) -> ColoredString{
+fn colorize(i: &str, color: &i32) -> ColoredString {
     match color {
         1 => return i.black(),
         2 => return i.red(),
@@ -70,6 +77,6 @@ fn colorize(i: &str,color: &i8) -> ColoredString{
         7 => return i.cyan(),
         8 => return i.white(),
         // catch all
-        _ => return "invalid color specified".red()
+        _ => return "invalid color specified".red(),
     }
 }
