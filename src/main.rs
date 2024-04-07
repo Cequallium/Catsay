@@ -11,7 +11,7 @@ fn main() {
         show_help();
     }
 
-    let color: Result<i32, _> = args[1].parse::<i32>();
+    let color: Result<i32, _> = args[2].parse::<i32>();
     let unwrapped_color: i32 = if color.is_err() { 
         show_errorhelp("Invalid color");
         exit(0)
@@ -24,7 +24,7 @@ fn main() {
         show_errorhelp("<Color> cannot be above 8");
     }
     else {
-        catsay(&args[2], unwrapped_color);
+        catsay(&args[1], unwrapped_color);
     }
 }
 
