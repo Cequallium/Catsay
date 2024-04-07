@@ -4,18 +4,26 @@ use std::{env, process::exit};
 fn main() {
     // get all args
     let args: Vec<String> = env::args().collect();
+    if args.len() == 1 {
+        show_help();
+    }
+    else if args[1] == "help" {
+        show_help();
+    }
+
     let color: Result<i32, _> = args[1].parse::<i32>();
-    let unwrapped_color = if color.is_err() { 
+    let unwrapped_color: i32 = if color.is_err() { 
         show_errorhelp("Invalid color");
         exit(0)
-    }else{
+    }
+    else {
         color.unwrap()
     };
 
-    if &unwrapped_color > &8{
+    if &unwrapped_color > &8 {
         show_errorhelp("<Color> cannot be above 8");
     }
-    else{
+    else {
         catsay(&args[2], unwrapped_color);
     }
 }
@@ -27,7 +35,7 @@ fn show_errorhelp(error: &str) {
 
 fn show_error(error: &str) {
     print!("\n");
-    println!("{}", error.red());
+    println!(" {}", error.red());
 }
 
 fn show_help() {
@@ -51,18 +59,15 @@ fn show_help() {
 }
 
 fn catsay(say: &str, color: i32) {
-    let line1: &str = "   /| ､      ";
-    let line2: &str = "  (°､ ｡ 7    ";
-    let line3: &str = "   |､  ~ヽ   ";
-    let line4: &str = "   じしf_,)〳 ";
-    let cat: [&str; 4] = [line1, line2, line3, line4];
-
-    for i in 0..=3 {
-        if i == 1 {
-            println!("{} {}", colorize(cat[i], &color), colorize(say, &color));
-        } else {
-            println!("{}", colorize(cat[i], &color));
-        }
+    let line1 = "   /| ､      ";
+    let line2 = format!("  (°､ ｡ 7    {say}");
+    let line3 = "   |､  ~ヽ   ";
+    let line4 = "   じしf_,)〳 ";
+    let cat: [&str; 4] = [line1, &line2, line3, line4];
+    
+    print!("\n");
+    for i in cat {
+        println!("{}", colorize(i, &color));
     }
 }
 
@@ -77,6 +82,6 @@ fn colorize(i: &str, color: &i32) -> ColoredString {
         7 => return i.cyan(),
         8 => return i.white(),
         // catch all
-        _ => return "invalid color specified".red(),
+        _ => return "Invalid color specified".red(),
     }
 }
